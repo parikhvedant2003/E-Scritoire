@@ -1,0 +1,109 @@
+:root {
+    --orange_main: #FF7F27;
+    --orange_main_trans: #FF7F2744;
+    --page_height: 29.7cm;
+    --curr_font_size: 100px;
+    --colorP: var(--orange_main);
+    --colorS: black;
+}
+ 
+.mainContent {
+    outline: none;
+    min-height: calc(var(--page_height) - 2.75rem);
+    max-height: calc(var(--page_height) - 2.75rem);
+}
+
+.page {
+    margin-bottom: 37px;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.page:last-child { margin-bottom: 0px; }
+
+.mainContent > div {
+    outline: none;
+}
+
+.toolbar {
+    border-bottom: 2px solid lightgrey;
+}
+
+.btn-group > .btn {
+    padding: 5px;
+}
+
+.btn:active { 
+    border: 2px solid var(--orange_main_trans); 
+    background-color: var(--orange_main_trans); 
+}
+
+.img-holder-div { 
+    overflow: auto;
+}
+
+/* When we select text, it overrides the blue default color */
+::selection { background-color: var(--orange_main_trans); }
+::-moz-selection { background-color: var(--orange_main_trans); }
+
+#clockUtilDrawer { border-radius: 50%; }
+
+.page { box-sizing: border-box; overflow-y: hidden; }
+
+.divbox, .divbox2 {
+    padding: 10px;
+    border-color: black;
+    border-width: 2px;
+    width: 17%;
+    margin: 5px;
+    min-height: 50px;
+    background-color: var(--orange_main_trans);
+}
+
+.divbox-selected, .divbox-selected2 {
+    background-image: url("./SVGs/check-circle-fill.svg");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.divbox-selected2 { background-position: top left; }
+
+.form-check-input:checked {
+    background-color: var(--orange_main);
+    border-color: var(--orange_main);
+}
+
+.colorDot, .colorHighlightDot, .colorFontDot {
+    width: 25px;
+    height: 25px;
+    display: inline-block;
+    border: 1px solid grey;
+    border-radius: 5px;
+}
+
+#themeDot {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border: 1px solid grey;
+    border-radius: 50%;
+    vertical-align: middle;
+    background-color: var(--orange_main);
+}
+
+sub { vertical-align: sub; }
+sup { vertical-align: super; }
+
+font[size='7'] {
+    font-size: var(--curr_font_size);
+}
+
+mark {
+    background-color: var(--orange_main_trans);
+}
+
+#helpModal img {
+    width: 50%;
+    display: block;
+    margin: 0 auto;
+}

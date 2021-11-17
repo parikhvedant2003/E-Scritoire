@@ -1,0 +1,292 @@
+<!-- Desk Utilities Web Application -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="./Clock/StopWatch.css"> -->
+    <link rel="stylesheet" href="./bootstrap-5.1.1-dist/css/bootstrap.min.css">
+    <title>Desk Utilities</title>
+</head>
+<style> 
+    @media only screen and (min-width: 992px) {
+        * {
+            cursor: none;
+        }
+        #cursor_svg {
+            position: absolute;
+            z-index: 100;
+            bottom: 5px;
+            transform: translate(-10%, -10%) rotateZ(25deg);
+            pointer-events: none;
+        }
+    }
+
+    .card-transparent { background: transparent; }
+
+    :root { 
+        --hover-svg-color: rgba(128, 128, 128, 0.5);
+        --hover-svg-color2: lightgrey;
+        --selection-color: #FF7F27bb;
+    }
+
+    #clockUtilDrawer {
+        border-radius: 50%;
+    }
+
+    /* When we select text, it overrides the blue default color */
+    ::selection { background-color: var(--selection-color); color: white; }
+    ::-moz-selection { background-color: var(--selection-color); color: white; }
+
+    .show_card_content {
+        outline: none;
+        border: none;
+        font-size: 30px;
+        background-color: transparent;
+        width: fit-content;
+        display: block;
+        margin: 0px auto;
+        padding: 4px 12px;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        transition: 0.5s;
+    }
+
+    .card-img-bottom { opacity: 0; padding: 500px 0px; }
+    .counter_card { opacity: 0; transform: rotateZ(45deg); transition: all 0.3s ease-in-out;}
+    </style>
+<body style="padding: 0px; margin: 0px; overflow-x: hidden;">
+    <!-- Custom Mouse Cursor -->
+    <img src="./SVG Icons/mouse-cursor.svg" class="d-none d-lg-inline" id="cursor_svg" height="24px" width="24px">
+
+    <!-- Loading Screen -->
+    <div id="loading_screen" class="col-12 bg-dark position-absolute top-0 bottom-0" style="z-index: 80;">
+        <img src="./Images/LogoWhite.png" class="display-4 col-12 text-center position-absolute text-light fw-bolder"  style="top: 40%; display: none;">
+        <h2 class="display-5 col-12 text-center position-absolute text-light top-50" style="display: none;">For You, For Productivity</h2>
+        <div class="spinner-border text-light position-absolute start-50"></div>
+    </div>
+    
+    <!-- Navigation Bar -->
+    <nav id="menu" class="fs-5 navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="z-index: 50;">
+        <div class="container-fluid">
+            <div class="navbar-brand font-monospace"><div data-bs-toggle="modal" data-bs-target="#clockUtilModal" id="clock"></div></div>
+            <button type="button" class="navbar-toggler" aria-expanded="false" data-bs-toggle="collapse" data-bs-target="#nav_content"><span class="navbar-toggler-icon"></span></button>
+            <div class="navbar-collapse justify-content-end collapse" id="nav_content">
+                <ul class="navbar-nav text-light" style="text-align: right;">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#carousel">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./Text_Editor/textEditor.html">Text Editor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./Calculator/calculator.html">Calculator</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid fixed-top g-0 bg-dark">
+        <div id="page_fill_bar_bg" class="progress bg-dark" style="height: 6px;">
+            <div id="page_fill_bar" class="progress-bar progress-bar-striped bg-dark" role="progressbar"></div>
+        </div>
+    </div>
+
+    <!-- Clock Utilities -->
+    <div class="modal fade" id="clockUtilModal">
+        <div class="modal-dialog">
+            <div class="modal-content" style="cursor: pointer;">
+                <div class="modal-header">
+                    <h3 class="modal-title">Clock Utilities</h3>
+                    <button class="btn btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-content">
+                    <div class="container">
+                        <p><div id="clockFull"></div></p>
+                        <hr>
+                    </div>
+                    <div class="container d-block m-auto">
+                        <div class="timerDisplay text-center d-block mx-auto w-50 text-light my-3 bg-dark p-3">
+                            00 : 00 : 00 : 00
+                        </div>
+                        <div class="buttons my-3 d-block mx-auto text-center">
+                            <button class="btn normbtn btn-lg text-light" style="background-color: #FF7F27;" id="startTimer">Start</button>
+                            <button class="btn normbtn btn-lg text-light btn-secondary" id="pauseTimer">Pause</button>
+                            <button class="btn normbtn btn-lg text-light btn-secondary" id="resetTimer">Reset</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-bs-dismiss="modal" class="btn normbtn text-light" style="background-color: #FF7F27;">Run in Background</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Carousel --> 
+    <div id="introCarousel" class="carousel bg-dark slide" data-bs-ride="carousel" style="z-index: 1;">
+        <div class="carousel-indicators">
+            <button data-bs-target="#introCarousel" data-bs-slide-to="0" class="active"></button>
+            <button data-bs-target="#introCarousel" data-bs-slide-to="1"></button>
+            <button data-bs-target="#introCarousel" data-bs-slide-to="2"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="./Images/LogoWhite.png" class="d-block bg-dark w-75 mx-auto">
+            </div>
+            <div class="carousel-item">
+                <img src="./Images/carousel_2(16x9).JPG" class="d-block w-75 mx-auto">
+            </div>
+            <div class="carousel-item">
+                <img src="./Images/carousel_1(16x9).JPG" class="d-block w-75 mx-auto">
+            </div>
+        </div>
+        <button class="carousel-control-prev" style="cursor: none;" data-bs-target="#introCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+          </button>
+          <button class="carousel-control-next" style="cursor: none;" data-bs-target="#introCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+          </button>
+    </div>
+
+    <!-- Content for description -->
+    <div class="container">
+        <h2 class="display-4 d-inline-block my-2 my-lg-5 border-5" style="border-bottom: 10px solid #FF7F27cc;">E-Scritoire Services</h2>
+    </div>
+    <div class="container">
+        <div id="text_editor_card" class="card shadow border-end-0 border-bottom-0 border-top-0 border-info" style="border-width: 10px;">
+            <div class="card-header">
+                <h2>Text Editor</h2>
+            </div>
+            <div class="card-body row">
+                <p class="col-md-10 col-12 fs-5 d-block text-secondary my-auto" style="text-align: justify; text-align-last: center;">E-Scritoire provides its very own customised text editor with a lot of functionalities built absolutely free for you to meet the modern day requirements of effiecient content writing and designing. With great design and a great workspace, this is your best chance to give it a try and make it yours by our wonderful customisation options.</p>
+                <img src="./SVG Icons/notes-notebook-svgrepo-com.svg" class="d-md-block d-none col-2">
+            </div>
+        </div>
+        <div class="card shadow my-3 my-lg-5 border-start-0 border-bottom-0 border-top-0 border-warning" style="border-width: 10px;">
+            <div class="card-header">
+                <h2 class="float-end">Calculator</h2>
+            </div>
+            <div class="card-body row">
+                <img src="./SVG Icons/Calculator_icon.svg" class="d-md-block d-none col-2">
+                <p class="col-md-10 col-12 fs-5 d-block text-secondary my-auto" style="text-align: justify; text-align-last: center;">With our calculator you can perform calculations which require more than "just" a calculator. With advanced arithemetic and calculus, you get the chance perform complex analysis within seconds! What are you waiting for? Switch to our calculator now and get started.</p>
+            </div>
+        </div>
+        <div class="card shadow my-3 my-lg-5 border-end-0 border-bottom-0 border-top-0 border-success" style="border-width: 10px;">
+            <div class="card-header">
+                <h2>Clock and Timer</h2>
+            </div>
+            <div class="card-body row">
+                <p class="col-md-10 col-12 fs-5 d-block text-secondary my-auto" style="text-align: justify; text-align-last: center;">Afraid of forgetting important meetings? Or are you preparing for competitive exams where time management becomes a skill. Don't worry, with our clock and timer you can schedule tasks as well as effieciently manage your time with just the click of a button.</p>
+                <img src="./SVG Icons/Icon_Clock.svg" class="d-md-block d-none col-2">
+            </div>
+        </div>
+    </div>
+    
+    <!-- About the Team -->
+    <div style="background-image: url(./SVG\ Icons/project-counter-background.svg); background-size: cover; background-repeat: no-repeat;">
+    <div class="container">
+        <h2 class="display-4 d-inline-block my-2 my-lg-5 border-5" style="border-bottom: 10px solid #FF7F27cc;">E-Scritoire Team</h2>
+    </div>
+    <div class="container my-lg-5 my-3">
+        <div class="d-flex justify-content-evenly row">
+            <div class="card counter_card shadow border-0 col-lg-3 col-md-6 col-12">
+                <div class="card-body text-center">
+                    <p class="counter text-secondary" style="font-size: 60px;"><span style="color: #FF7F27; font-size: 75px;">0</span>+</p>
+                    <p class="text-secondary fs-5">Projects Made</p>
+                </div>
+            </div>
+            <div class="card counter_card shadow border-0 col-lg-3 col-md-6 col-12">
+                <div class="card-body text-center">
+                    <p class="counter text-secondary" style="font-size: 60px;"><span style="color: #FF7F27; font-size: 75px;">0</span>+</p>
+                    <p class="text-secondary fs-5">Years of Experience</p>
+                </div>
+            </div>
+            <div class="card counter_card shadow border-0 col-lg-3 col-md-6 col-12">
+                <div class="card-body text-center">
+                    <p class="counter text-secondary" style="font-size: 60px;"><span style="color: #FF7F27; font-size: 75px;">0</span>+</p>
+                    <p class="text-secondary fs-5">Web Technologies Mastered</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p style="margin: 0px;"> &nbsp; </p>
+    </div>
+    <div style="background-image: url(./SVG\ Icons/project-counter-background-inverted.svg); background-size: cover; background-repeat: no-repeat;">
+    <div class="container">
+        <h3 class="display-4 text-secondary">Meet the Team</h3>
+    </div>
+    <div class="container-fluid g-0">
+        <div class="container-fluid d-flex justify-content-center row" style="background-color: transparent;">
+            <div class="card card-transparent col-sm-6 col-lg-3 col-12 border-0">
+                <img src="Images/Manav Mistry.jfif" class="card-img-bottom">
+                <button class="show_card_content" style="cursor: none;"> &#11165; </button>
+                <div class="card-body show_card_content-content" style="display: none;">
+                    <h3 class="display-6">Manav Mistry</h3>
+                    <h5 style="color: #FF7F27">Front and Back End Developer</h5>
+                    <hr>
+                    <p class="d-none d-lg-block" style="text-align: justify;">Manav has an experience in some of the best back end technologies and is a major contributor at E-Scritoire.</p>
+                    <p class="d-none d-lg-block" style="text-align: justify;">He has already worked in multiple small and large scale projects, including an online cloth shopping emporium.</p>
+                </div>
+            </div>
+            
+            <div class="card card-transparent col-sm-6 col-lg-3 col-12 border-0">
+                <img src="Images/Shrey Naik.jpg" class="card-img-bottom">
+                <button class="show_card_content" style="cursor: none;"> &#11165; </button>
+                <div class="card-body show_card_content-content w-auto" style="display: none;">
+                    <h3 class="display-6">Shrey Naik</h3>
+                    <h5 style="color: #FF7F27">Front and Back End Developer</h5>
+                    <hr>
+                    <p class="d-none d-lg-block" style="text-align: justify;">Shrey has an experience in some of the world's most advanced and important technologies like Python, JavaScript, Kotlin, PHP and a lot more.</p>
+                    <p class="d-none d-lg-block" style="text-align: justify;">He has already worked in multiple small and large scale projects and is one of the major contributors of E-Scritoire.</p>
+                </div>
+            </div>
+            
+            <div class="card card-transparent col-sm-6 col-lg-3 col-12 border-0">
+                <img src="Images/Vedant Parikh.jfif" class="card-img-bottom">
+                <button class="show_card_content" style="cursor: none;"> &#11165; </button>
+                <div class="card-body show_card_content-content" style="display: none;">
+                    <h3 class="display-6">Vedant Parikh</h3>
+                    <h5 style="color: #FF7F27">Front and Back End Developer</h5>
+                    <hr>
+                    <p class="d-none d-lg-block" style="text-align: justify;">Vedant has been working as a Web Dev since the past one year. Since then he has mastered some of the basic technologies and makes great use of them.</p>
+                    <p class="d-none d-lg-block" style="text-align: justify;">He also owns a YouTube channel for tutorials.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <img src="SVG Icons/background-svg.svg">
+    <!-- Footer -->
+    <div id="about_us" class="container-fluid row bg-dark text-light g-0 fs-5 text-center">
+        <div class="col-lg-4 col-12 d-block my-auto">
+            <br>
+            <iframe style="width: 75%; height: 300px;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d58900.721052745335!2d72.87643555012727!3d22.68005718429107!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e5b060b242c55%3A0xc415d383e5344e08!2sNadiad%2C%20Gujarat!5e0!3m2!1sen!2sin!4v1632923195372!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>            
+            <br><br>
+        </div>
+        <div class="col-lg-4 col-12 d-block my-auto text-secondary">
+            <h2 class="text-light">What is Escritoire?</h2>
+            <p style="text-align: justify; text-align-last: center;">E-Scritoire means a small desk with a few drawers. As our utility system provides the resources for better productivity while sitting at home on a desk, it best resembles an E-Desk where you can quickly find all the available tools for studying, working, taking notes or anything with just the click of a button.</p>
+            <p>&copy; 2021 E-Scritoire</p>
+        </div>
+        <div class="col-lg-4 col-12 text-center">
+            <br>
+            <h2 class="text-center">CONTACTS</h2><br>
+            <div class="text-center text-secondary">
+                <p><img src="./SVG Icons/telephone-fill.svg" class="mx-3" style="filter: invert(1)">+91 79840 22120 (Shrey)</p>
+                <p><img src="./SVG Icons/telephone-fill.svg" class="mx-3" style="filter: invert(1)">+91 91731 99146 (Manav)</p>
+                <p><img src="./SVG Icons/telephone-fill.svg" class="mx-3" style="filter: invert(1)">+91 94286 37251 (Vedant)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Adding JS & Bootstrap references -->
+    <script src="./jQuery.js"></script>
+    <script src="./bootstrap-5.1.1-dist/js/bootstrap.min.js"></script>
+    <script src="index.js"></script>
+    <script src="./Clock/StopWatch.js"></script>
+    <script src="./Clock/LiveClock.js"></script>
+</body>
+</html>
