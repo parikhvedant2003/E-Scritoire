@@ -178,7 +178,7 @@ $(document).ready(() => {
         let activePage = getActivePage("page");
         if(activePage != "") {
             let page = document.getElementById(activePage);
-            if(event.keyCode == 8 && (page.firstChild.childNodes.length == 1 && page.firstChild.childNodes[0].innerHTML == "") || page.firstChild.childNodes.length == 0 && page.id !== "01") {
+            if(event.keyCode == 8 && ((page.firstChild.childNodes.length == 1 && page.firstChild.childNodes[0].innerHTML == "") || page.firstChild.childNodes.length == 0 && page.id !== "01")) {
                 page.remove();
                 currentPage --;
                 
